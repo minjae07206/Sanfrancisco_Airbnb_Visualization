@@ -9,6 +9,7 @@ const csvUrl = '/final.csv';
 // Credits: 'https://cartographyvectors.com/map/627-san-francisco-ca'
 const mapUrl = '/san-francisco-ca_.geojson';
 const a = 1;
+const b = 1;
 function useData(csvPath){
     const [dataAll, setData] = React.useState(null);
     React.useEffect(() => {
