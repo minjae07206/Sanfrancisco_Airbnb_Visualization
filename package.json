@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "d3-geo": "^3.0.1",
+    "ion-rangeslider": "^2.3.1",
+    "react-slider": "^2.0.6",
     "topojson-client": "^3.1.0"
   },
   "description": ""

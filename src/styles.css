@@ -8,12 +8,35 @@ h1 {
     padding: 5px;
 }
 
-svg {
-    border-width: 1px;
-    border-style: solid;
-    border-color: black;
-}
 
 .mainView {
     display: flex;
+}
+
+.tooltip-text {
+    text-align: center;
+    font-size: 10px;
+}
+
+.horizontal-slider {
+    width: 200px;
+    left: 100px;
+    top: -700px;
+    height: 25px;
+    background-color: orange;
+}
+
+.example-thumb {
+    background-color: red;
+    min-width: 25px;
+}
+
+.example-track {
+    height: 25px;
+}
+
+.example-track-1 {
+    background-color: green;
+    height: 25px;
+    z-index: 0;
 }

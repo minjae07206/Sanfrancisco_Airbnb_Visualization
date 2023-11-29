@@ -15,7 +15,8 @@ function useData(csvPath){
     React.useEffect(() => {
         csv(csvPath).then(data => {
             data.forEach(d => {
-                console.log(d)
+                d.price = d.price.slice(1)
+                d.price = +d.price
             });
             setData(data);
         });
@@ -35,11 +36,10 @@ function useMap(jsonPath) {
 
 
 function Main(){
-    // const [selectedAirline, setSelectedAirline]=React.useState(null);
-    const routes = useData(csvUrl);
+    const airbnbs = useData(csvUrl);
     const map = useMap(mapUrl);
     
-    if (!map || !routes) {
+    if (!map || !airbnbs) {
         return <pre>Loading...</pre>;
     };
     //let airlines = groupByAirline(routes);
@@ -49,8 +49,10 @@ function Main(){
     // console.log(routes);
     return <div>
                 <h1>Sanfrancisco Airbnb</h1>
-                <AirbnbMap></AirbnbMap>
-                <AirbnbBar></AirbnbBar>
+                
+                <AirbnbMap countries={map} airbnbs={airbnbs}></AirbnbMap>
+                
+                <AirbnbBar airbnbs={airbnbs}></AirbnbBar>
             </div>
 }
 
