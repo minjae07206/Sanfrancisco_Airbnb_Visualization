@@ -15,8 +15,8 @@ function useData(csvPath){
     React.useEffect(() => {
         csv(csvPath).then(data => {
             data.forEach(d => {
-                d.price = d.price.slice(1)
-                d.price = +d.price
+                d.price = d.price.replace(/[^0-9.-]/g, '');
+                d.price = parseFloat(d.price)
             });
             setData(data);
         });
@@ -48,8 +48,8 @@ function Main(){
     // console.log(airports);
     // console.log(routes);
     return <div>
-                <h1>Sanfrancisco Airbnb</h1>
-                
+                <h1>Get the best deal for your Airbnb</h1>
+                <h2>Map of Sanfrancisco with Airbnbs</h2>
                 <AirbnbMap countries={map} airbnbs={airbnbs}></AirbnbMap>
                 
                 <AirbnbBar airbnbs={airbnbs}></AirbnbBar>

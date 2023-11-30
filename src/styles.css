@@ -1,34 +1,40 @@
 body {
-    font-family: Helvetica, Arial, sans-serif
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 h1 {
-    background-color: #2a5599;
-    color: white;
+    background-color: #002D62;
+    color: whitesmoke;
     padding: 5px;
+    margin-bottom: 0px;
+    text-align: center;
+    font-size: 60px;
 }
 
+h2 {
+    background-color: #7CB9E8;
+    margin-bottom: 50px;
+    padding-left: 50px;
+}
 
 .mainView {
     display: flex;
 }
 
-.tooltip-text {
-    text-align: center;
-    font-size: 10px;
-}
-
 .horizontal-slider {
-    width: 200px;
+    width: 500px;
     left: 100px;
-    top: -700px;
+    top: -730px;
     height: 25px;
-    background-color: orange;
+    background-color: #FFAC1C;
+    border-radius: 5px;
 }
 
 .example-thumb {
-    background-color: red;
+    background-color: #002D62;
     min-width: 25px;
+    border-radius: 5px;
+    color: whitesmoke;
 }
 
 .example-track {
@@ -36,7 +42,29 @@ h1 {
 }
 
 .example-track-1 {
-    background-color: green;
+    background-color:#7CB9E8 ;
     height: 25px;
     z-index: 0;
+    border-radius: 5px;
 }
+
+.tooltip-container {
+    position: absolute;
+    display: inline-block;
+    z-index: 5;
+    background-color: #002D62;
+    border-radius: 5px;
+  }
+  
+  
+  .tooltip-text {
+    font-size: 14px;
+    color: whitesmoke;
+    line-height: 1.5;
+  }
+
+  .selected-circle {
+    r: 10;
+    fill: #FFAC1C;
+  }
+  

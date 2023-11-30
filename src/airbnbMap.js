@@ -8,31 +8,40 @@ function AirbnbMap(props) {
   const {countries, airbnbs } = props;
   const [tooltip, setTooltip] = useState(null);
   const [tooltipPermanent, setTooltipPermanent] = useState(false);
-  const airbnbPriceList = airbnbs.map((d)=> d.price);
+  const airbnbPriceList = airbnbs.map((d)=> {
+    return d.price
+  });
   const [priceRange, setPriceRange] = useState(extent(airbnbPriceList))
+  console.log(priceRange)
   const [currentAirbnbs, setCurrentAirbnbs] = useState(airbnbs);
   const projection = geoMercator()
     .scale(200000)
     .translate([427720, 142880]);
   const path = geoPath().projection(projection);
   function mouseEnter (event, airbnb) {
+    console.log(event)
     if (!tooltipPermanent) {
+      event.target.classList.add("selected-circle")
       setTooltip([airbnb, event]);
     }
   };
 
   const mouseOut = (event) => {
     if (!tooltipPermanent) {
+      event.target.classList.remove("selected-circle")
       setTooltip(null);
     }
   };
 
   const mouseClick = (event) => {
+    event.target.classList.add("selected-circle")
     setTooltipPermanent(true);
     
   };
 
   const removeTooltip = (event) => {
+    const target = document.querySelector('.selected-circle')
+    target.classList.remove("selected-circle")
     setTooltipPermanent(false);
     setTooltip(null);
 }
@@ -68,34 +77,21 @@ useEffect(() => {
           key={d.id}
           cx={projection([d.longitude, d.latitude])[0]}
           cy={projection([d.longitude, d.latitude])[1]}
-          r={2}
-          fill={"#2a5599"}
+          r={3}
+          fill={"#6CB4EE"}
         ></circle>
       ))}
-      {tooltip && (
-        <g>
-          <rect
-            x={tooltip[1].clientX - 55}
-            y={tooltip[1].clientY - 115}
-            width="120"
-            height="40"
-            fill="yellow"
-            rx="5"
-            ry="5"
-          />
-          <text
-            x={tooltip[1].clientX - 55}
-            y={tooltip[1].clientY - 105}
-            fill="green"
-            className="tooltip-text"
-          >
-            <tspan>{tooltip[0].name}</tspan>
-            <tspan dy="1em">{tooltip[0].price}</tspan>
-          </text>
-        </g>
-      )}
+      
     </g>
     </svg>
+    {tooltip && (
+      <div className={'tooltip-container'} style={{left: tooltip[1].screenX - 80, top: tooltip[1].screenY - 50}}>
+        <div className="tooltip-text">
+          <div>{tooltip[0].name}</div>
+          <div>Price: ${tooltip[0].price}.00</div>
+      </div>
+      </div>
+      )}
     <ReactSlider
     className="horizontal-slider"
     thumbClassName="example-thumb"
@@ -107,7 +103,7 @@ useEffect(() => {
     pearling
     minDistance={10}
     // For some reason, putting priceRange[1] and priceRange[0] causes the track to not move.
-    max={999}
+    max={1800}
     min={30}
     onChange={(price)=>{
         setPriceRange(price);
