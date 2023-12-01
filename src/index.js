@@ -8,8 +8,6 @@ import { AirbnbBar } from "./airbnbBar";
 const csvUrl = '/final.csv';
 // Credits: 'https://cartographyvectors.com/map/627-san-francisco-ca'
 const mapUrl = '/san-francisco-ca_.geojson';
-const a = 1;
-const b = 1;
 function useData(csvPath){
     const [dataAll, setData] = React.useState(null);
     React.useEffect(() => {
@@ -49,7 +47,7 @@ function Main(){
     // console.log(routes);
     return <div>
                 <h1>Get the best deal for your Airbnb</h1>
-                <h2>Map of Sanfrancisco with Airbnbs</h2>
+                <h2>Map of San Francisco with Airbnbs</h2>
                 <AirbnbMap countries={map} airbnbs={airbnbs}></AirbnbMap>
                 
                 <AirbnbBar airbnbs={airbnbs}></AirbnbBar>

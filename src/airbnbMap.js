@@ -33,8 +33,9 @@ function AirbnbMap(props) {
     }
   };
 
-  const mouseClick = (event) => {
+  const mouseClick = (event, d) => {
     event.target.classList.add("selected-circle")
+    console.log(d)
     setTooltipPermanent(true);
     
   };
@@ -73,7 +74,7 @@ useEffect(() => {
           onMouseEnter={(e) => {
             mouseEnter(e, d);}}
           onMouseOut={mouseOut}
-          onClick={mouseClick}
+          onClick={(e)=>{mouseClick(e,d)}}
           key={d.id}
           cx={projection([d.longitude, d.latitude])[0]}
           cy={projection([d.longitude, d.latitude])[1]}
@@ -87,7 +88,7 @@ useEffect(() => {
     {tooltip && (
       <div className={'tooltip-container'} style={{left: tooltip[1].screenX - 80, top: tooltip[1].screenY - 50}}>
         <div className="tooltip-text">
-          <div>{tooltip[0].name}</div>
+          <div><a href={tooltip[0].listing_url} target="_blank">{tooltip[0].name}</a></div>
           <div>Price: ${tooltip[0].price}.00</div>
       </div>
       </div>

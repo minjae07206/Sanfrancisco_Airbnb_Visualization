@@ -56,7 +56,6 @@ h2 {
     border-radius: 5px;
   }
   
-  
   .tooltip-text {
     font-size: 14px;
     color: whitesmoke;
@@ -67,4 +66,8 @@ h2 {
     r: 10;
     fill: #FFAC1C;
   }
+
+a {
+    color: whitesmoke;
+}
   
