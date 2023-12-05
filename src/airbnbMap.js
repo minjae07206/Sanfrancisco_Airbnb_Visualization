@@ -3,23 +3,24 @@ import { geoPath, geoMercator } from "d3-geo";
 import {extent} from "d3";
 import ReactSlider from 'react-slider'
 import { filterPrice } from "./filterPrice";
+import { AirbnbBar } from './airbnbBar';
 
 function AirbnbMap(props) {
   const {countries, airbnbs } = props;
   const [tooltip, setTooltip] = useState(null);
   const [tooltipPermanent, setTooltipPermanent] = useState(false);
+  const [currentAirbnb, setCurrentAirbnb] = useState(null);
+  const [sliderDisabled, setsliderDisabled] = useState(false)
   const airbnbPriceList = airbnbs.map((d)=> {
     return d.price
   });
   const [priceRange, setPriceRange] = useState(extent(airbnbPriceList))
-  console.log(priceRange)
   const [currentAirbnbs, setCurrentAirbnbs] = useState(airbnbs);
   const projection = geoMercator()
     .scale(200000)
     .translate([427720, 142880]);
   const path = geoPath().projection(projection);
   function mouseEnter (event, airbnb) {
-    console.log(event)
     if (!tooltipPermanent) {
       event.target.classList.add("selected-circle")
       setTooltip([airbnb, event]);
@@ -35,16 +36,19 @@ function AirbnbMap(props) {
 
   const mouseClick = (event, d) => {
     event.target.classList.add("selected-circle")
-    console.log(d)
+    setCurrentAirbnb(d);
     setTooltipPermanent(true);
+    setsliderDisabled(true);
     
   };
 
   const removeTooltip = (event) => {
     const target = document.querySelector('.selected-circle')
     target.classList.remove("selected-circle")
-    setTooltipPermanent(false);
+    setTooltipPermanent(null);
     setTooltip(null);
+    setCurrentAirbnb(null)
+    setsliderDisabled(false);
 }
 const handleDocumentClick = (event) => {
     if (tooltipPermanent) {
@@ -58,7 +62,8 @@ useEffect(() => {
       document.removeEventListener("click", handleDocumentClick);
     };
   }, [tooltipPermanent]);
-  return (<div>
+  return <div className="master">
+  <div className="map">
   <svg id={"map"} width={700} height={700}>
     <g>
       {countries.features.map((d) => (
@@ -99,6 +104,7 @@ useEffect(() => {
     trackClassName="example-track"
     defaultValue={[priceRange[0], priceRange[1]]}
     ariaLabel={['Lower thumb', 'Upper thumb']}
+    disabled={sliderDisabled}
     ariaValuetext={state => `Thumb value ${state.valueNow}`}
     renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
     pearling
@@ -111,8 +117,14 @@ useEffect(() => {
         setCurrentAirbnbs(filterPrice(airbnbs, priceRange));
     }}
 />
-    </div>
-  );
+<div className="slider-label">Price Range</div>
+</div>
+<div>
+    {currentAirbnb && (
+      <AirbnbBar airbnbs={currentAirbnb}></AirbnbBar>
+    )}
+</div>
+    </div>;
 }
 
 export { AirbnbMap };

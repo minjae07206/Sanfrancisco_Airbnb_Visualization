@@ -41,9 +41,19 @@ function Main(){
     };
     return <div>
                 <h1>Get the best deal for your Airbnb</h1>
-                <h2>Map of San Francisco with Airbnbs</h2>
-                <AirbnbMap countries={map} airbnbs={airbnbs}></AirbnbMap>
+                <div style={{display: 'flex'}}>
+                    <h2>Map of San Francisco with Airbnbs</h2>
+                    <h2>Bar Charts</h2>
+                </div>
                 
+                <AirbnbMap countries={map} airbnbs={airbnbs}></AirbnbMap>
+                <div className="instructions">
+                    <p>1. Each dot on the map represents a Airbnb.</p>
+                    <p>2. The Price Range slider can be used to filter out Airbnbs.</p>
+                    <p>3. Hover over a dot to get information about Airbnb.</p>
+                    <p>4. Click on a dot to show bar charts for comparison with neighbourhood.</p>
+                    <p>5. Click on the Airbnb name on tooltip to link to the Airbnb webpage.</p>
+                </div>
             </div>
 }
 

@@ -1,208 +1,118 @@
 import React from "react";
 import { max, scaleBand, scaleLinear } from "d3";
 import { XAxis, YAxis, XAxis2, YAxis2 } from "./axes";
+import { csv } from "d3";
+
+import { AirbnbBar_price, AirbnbBar_overall_rating, AirbnbBar_indivdual_rating } from "./airbnbBarInner";
+
+const csvUrl = '/average_neighbourhood.csv';
+function useData(csvPath) {
+    const [dataAll, setData] = React.useState(null);
+    React.useEffect(() => {
+        csv(csvPath).then(data => {
+            data.forEach(d => {
+                d.price = d.price.replace(/[^0-9.-]/g, '');
+                d.price = parseFloat(d.price)
+                d.overall_rating = +d.overall_rating
 
 
-function AirbnbBar_price (props) {
-    const { offsetX, offsetY, height, width, data, selectedAirbnbID, setSelectedAirbnbID } = props;
-
-
-
-    // Define the xScale using price for the horizontal axis
-    const xScale = scaleLinear()
-        .domain([0, max(data.map(d => d.price))]) // Use the maximum price as the upper limit
-        .range([0, width])
-        .nice();
-
-    // Define the yScale using neighbourhood for the vertical axis
-    const yScale = scaleBand()
-        .domain(["Airbnb", "Average of Airbnb"])
-        .range([0, height])
-        .padding(0.1);
-
-    // // Define a function to determine the color for each bar
-    // const color = (d) => {
-    //     return d.id === selectedAirbnbID ? "#992a5b" : "#2a5599";
-    // };
-
-    // // Define a function to handle mouse over event
-    // const onMouseOver = (d) => {
-    //     setSelectedAirbnbID(d.id);
-    // };
-
-    // // Define a function to handle mouse out event
-    // const onMouseOut = () => {
-    //     setSelectedAirbnbID(null);
-    // };
-
-    const firstNeighborhoodData = data[0];
-    const secondNeighborhoodData = data[1];
-
-
-    return (
-        <g transform={`translate(${offsetX}, ${offsetY})`}>
-            {/* X and Y axes components */}
-            <XAxis xScale={xScale} width={width} height={height}></XAxis>
-            <YAxis yScale={yScale} height={height} offsetX={offsetX}></YAxis>
-            <rect
-                key={"bar1"}  // Unique key for the first rect
-                x={yScale(firstNeighborhoodData.neighbourhood)}
-                y={72}
-                height={30}
-                width={xScale(firstNeighborhoodData.price)}
-                stroke={"#2a5599"}
-            />
-
-            <rect
-                key={"bar2"}  // Unique key for the second rect
-                x={yScale(secondNeighborhoodData.neighbourhood)}
-                y={220}
-                height={xScale(secondNeighborhoodData.price)}
-                width={yScale.bandwidth()}
-                stroke={"#2a5599"}
-            />
-        </g>
-    );
-    
-
+            });
+            setData(data);
+        });
+    }, []);
+    return dataAll;
 }
 
-export {AirbnbBar_price}
+function AirbnbBar(props) {
 
+    const { airbnbs } = props;
+    const neighbourhoods = useData(csvUrl);
+    const [selectedAirbnbID, setSelectedAirbnbID] = React.useState(null);
 
-function AirbnbBar_overall_rating (props) {
-    const { offsetX, offsetY, height, width, data, selectedAirbnbID, setSelectedAirbnbID } = props;
+    const dataInBarChart = [airbnbs]
+    const barchart_width = 350;
+    const barchart_height = 200;
+    const barchart_margin = { top: 10, bottom: 50, left: 130, right: 10 };
+    const barchart_inner_width = barchart_width - barchart_margin.left - barchart_margin.right;
+    const barchart_inner_height = barchart_height - barchart_margin.top - barchart_margin.bottom;
 
-    // Define the xScale using price for the horizontal axis
-    const xScale = scaleLinear()
-        .domain([70, max(data.map(d => d.overall_rating))]) // Use the maximum price as the upper limit
-        .range([0, width])
-        .nice();
-
-    // Define the yScale using neighbourhood for the vertical axis
-    const yScale = scaleBand()
-        .domain(["Airbnb", "Average of Airbnb"])
-        .range([0, height])
-        .padding(0.1);
-
-    // // Define a function to determine the color for each bar
-    // const color = (d) => {
-    //     return d.id === selectedAirbnbID ? "#992a5b" : "#2a5599";
-    // };
-
-    // // Define a function to handle mouse over event
-    // const onMouseOver = (d) => {
-    //     setSelectedAirbnbID(d.id);
-    // };
-
-    // // Define a function to handle mouse out event
-    // const onMouseOut = () => {
-    //     setSelectedAirbnbID(null);
-    // };
-
-    const firstNeighborhoodData = data[0];
-    const secondNeighborhoodData = data[1];
-
-
+    if (!neighbourhoods) {
+        return <pre>Loading...</pre>;
+    };
+    for (let object of neighbourhoods) {
+        if (object.neighbourhood == airbnbs.neighbourhood_cleansed) {
+            dataInBarChart.push(object)
+        }
+    }
     return (
-        <g transform={`translate(${offsetX}, ${offsetY})`}>
-            {/* X and Y axes components */}
-            <XAxis xScale={xScale} width={width} height={height}></XAxis>
-            <YAxis yScale={yScale} height={height} offsetX={offsetX}></YAxis>
-            <rect
-                key={"bar1"}  // Unique key for the first rect
-                x={yScale(firstNeighborhoodData.neighbourhood)}
-                y={72}
-                height={30}
-                width={xScale(firstNeighborhoodData.overall_rating)}
-                stroke={"#2a5599"}
-            />
-
-            <rect
-                key={"bar2"}  // Unique key for the second rect
-                x={yScale(secondNeighborhoodData.neighbourhood)}
-                y={220}
-                height={30}
-                width={xScale(secondNeighborhoodData.overall_rating)}
-                stroke={"#2a5599"}
-            />
-            
-        </g>
+        <div>
+            <div className="color-legend">
+                <p>Color Legend</p>
+                <div style={{ display: "flex" }}>
+                    <p>Selected Airbnb:</p>
+                    <div className="orange"></div>
+                </div>
+                <div style={{ display: "flex" }}>
+                    <p>Average in {airbnbs.neighbourhood_cleansed}:</p>
+                    <div className="blue"></div>
+                </div>
+            </div>
+            <div style={{display: 'flex', flexWrap: "wrap"}}>
+                <div>
+                {/* Airbnb Price */}
+                <h3>Price in USD$</h3>
+                <svg
+                    id={"barchart"}
+                    width={barchart_width}
+                    height={barchart_height}
+                >
+                    <AirbnbBar_price
+                        offsetX={barchart_margin.left}
+                        offsetY={barchart_margin.top}
+                        height={barchart_inner_height}
+                        width={barchart_inner_width}
+                        data={dataInBarChart}
+                        selectedAirbnbID={selectedAirbnbID}
+                        setSelectedAirbnbID={setSelectedAirbnbID}
+                    />
+                </svg>
+                </div>
+                {/* Airbnb Ratings */}
+                <div>
+                <h3>Overall Rating</h3>
+                <svg
+                    id={"barchart2"}
+                    width={barchart_width}
+                    height={barchart_height}
+                >
+                    <AirbnbBar_overall_rating
+                        offsetX={barchart_margin.left}
+                        offsetY={barchart_margin.top}
+                        height={barchart_inner_height}
+                        width={barchart_inner_width}
+                        data={dataInBarChart}
+                    />
+                </svg>
+                </div>
+                <div>
+                <h3>Individual Ratings</h3>
+                <svg
+                    id={"barchart3"}
+                    width={barchart_width}
+                    height={barchart_height}
+                >
+                    <AirbnbBar_indivdual_rating
+                        offsetX={barchart_margin.left}
+                        offsetY={barchart_margin.top}
+                        height={barchart_inner_height}
+                        width={barchart_inner_width}
+                        data={dataInBarChart}
+                    />
+                </svg>
+                </div>
+            </div>
+        </div>
     );
-    
-
 }
 
-export {AirbnbBar_overall_rating}
-
-
-
-
-function AirbnbBar_indivdual_rating (props) {
-    const { offsetX, offsetY, height, width, data, selectedAirbnbID, setSelectedAirbnbID } = props;
-
-    // Define the xScale using price for the horizontal axis
-    const xScale = scaleLinear()
-        .domain([7, max(data.map(d => d.review_checking))]) // Use the maximum price as the upper limit
-        .range([0, width])
-        .nice();
-
-    // Define the yScale using neighbourhood for the vertical axis
-    const yScale = scaleBand()
-        .domain(["1", "2", "3", "4", "5"])
-        .range([0, height])
-        .padding(0.1);
-
-    // // Define a function to determine the color for each bar
-    // const color = (d) => {
-    //     return d.id === selectedAirbnbID ? "#992a5b" : "#2a5599";
-    // };
-
-    // // Define a function to handle mouse over event
-    // const onMouseOver = (d) => {
-    //     setSelectedAirbnbID(d.id);
-    // };
-
-    // // Define a function to handle mouse out event
-    // const onMouseOut = () => {
-    //     setSelectedAirbnbID(null);
-    // };
-
-    const firstNeighborhoodData = data[0];
-    const secondNeighborhoodData = data[1];
-    const thirdNeighborhoodData = data[2];
-    const fourthNeighborhoodData = data[3];
-    const fifthNeighborhoodData = data[4];
-
-
-    return (
-        <g transform={`translate(${offsetX}, ${offsetY})`}>
-            {/* X and Y axes components */}
-            <XAxis xScale={xScale} width={width} height={height}></XAxis>
-            <YAxis yScale={yScale} height={height} offsetX={offsetX}></YAxis>
-            <rect
-                key={"bar1"}  // Unique key for the first rect
-                x={yScale(firstNeighborhoodData.neighbourhood)}
-                y={72}
-                height={30}
-                width={xScale(firstNeighborhoodData.overall_rating)}
-                stroke={"#2a5599"}
-            />
-
-            <rect
-                key={"bar2"}  // Unique key for the second rect
-                x={yScale(secondNeighborhoodData.neighbourhood)}
-                y={220}
-                height={30}
-                width={xScale(secondNeighborhoodData.overall_rating)}
-                stroke={"#2a5599"}
-            />
-            
-        </g>
-    );
-    
-
-}
-
-export {AirbnbBar_indivdual_rating}
-
+export { AirbnbBar }

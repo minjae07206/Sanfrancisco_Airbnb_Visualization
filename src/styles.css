@@ -14,16 +14,14 @@ h1 {
 h2 {
     background-color: #7CB9E8;
     margin-bottom: 50px;
-    padding-left: 50px;
+    width: 50%;
+    text-align: center;
 }
 
-.mainView {
-    display: flex;
-}
 
 .horizontal-slider {
     width: 500px;
-    left: 100px;
+    left: 130px;
     top: -730px;
     height: 25px;
     background-color: #FFAC1C;
@@ -71,3 +69,49 @@ a {
     color: whitesmoke;
 }
   
+.master {
+    display: flex;
+
+}
+
+.airbnb-bar {
+    width: 100px;
+}
+
+.orange {
+    background-color: #FFAC1C;
+    width: 35px;
+    height: 30px;
+    margin-left: 10px;
+    border-radius: 30px;
+}
+
+.blue {
+    background-color: #00308F;
+    width: 35px;
+    height: 30px;
+    margin-left: 20px;
+    border-radius: 30px;
+}
+
+.color-legend {
+    border: 2px solid #00308F;
+    padding: 5px;
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
+
+.slider-label {
+    position: relative;
+    top: -755px;
+    left: 20px;
+}
+
+.instructions {
+    position: relative;
+    top: -140px;
+    left: 50px;
+    margin-top: 0px;
+    height: 200px;
+    font-size: 12px;
+}
