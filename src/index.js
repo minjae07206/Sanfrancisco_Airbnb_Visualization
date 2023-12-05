@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { csv, json } from "d3";
 import "./styles.css";
 import { AirbnbMap } from "./airbnbMap";
-import { AirbnbBar } from "./airbnbBar";
 
 const csvUrl = '/final.csv';
 // Credits: 'https://cartographyvectors.com/map/627-san-francisco-ca'
@@ -40,17 +39,11 @@ function Main(){
     if (!map || !airbnbs) {
         return <pre>Loading...</pre>;
     };
-    //let airlines = groupByAirline(routes);
-    //let airports = groupByAirport(routes);
-    // console.log(airlines);
-    // console.log(airports);
-    // console.log(routes);
     return <div>
                 <h1>Get the best deal for your Airbnb</h1>
                 <h2>Map of San Francisco with Airbnbs</h2>
                 <AirbnbMap countries={map} airbnbs={airbnbs}></AirbnbMap>
                 
-                <AirbnbBar airbnbs={airbnbs}></AirbnbBar>
             </div>
 }
 
